@@ -7,5 +7,11 @@
   },
   "license": "MIT",
   "keywords": ["froala", "wysiwyg", "editor", "rich-text", "filestack"],
-  "skills": "./skills/"
+  "skills": [
+    "./skills/froala-initialization-and-sdks/SKILL.md",
+    "./skills/froala-methods-and-events/SKILL.md",
+    "./skills/froala-custom-plugins/SKILL.md",
+    "./skills/froala-filestack-integration/SKILL.md",
+    "./skills/froala-error-diagnosis/SKILL.md"
+  ]
 }
