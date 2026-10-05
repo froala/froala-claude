@@ -1,5 +1,5 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "$schema": "https://code.claude.com/docs/schema/marketplace.schema.json",
   "name": "froala-claude",
   "description": "Claude Code plugins for Froala WYSIWYG editor integration",
   "owner": {
@@ -9,11 +9,9 @@
     {
       "name": "froala",
       "description": "Froala WYSIWYG editor plugin — get expert help with initialization, events, custom plugins, and Filestack integration.",
+      "version": "1.0.0",
       "category": "development",
-      "source": {
-        "source": "url",
-        "url": "https://github.com/froala/froala-claude.git"
-      },
+      "source": ".",
       "homepage": "https://github.com/froala/froala-claude"
     }
   ]
