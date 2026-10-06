@@ -9,7 +9,7 @@
     {
       "name": "froala",
       "description": "Froala WYSIWYG editor plugin — get expert help with initialization, events, custom plugins, and Filestack integration.",
-      "version": "1.0.0",
+      "version": "0.0.1",
       "category": "development",
       "source": ".",
       "homepage": "https://github.com/froala/froala-claude"

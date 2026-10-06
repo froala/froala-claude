@@ -169,6 +169,7 @@ froala-claude/
 │   │   └── SKILL.md
 │   └── froala-error-diagnosis/
 │       └── SKILL.md
+├── skills.sh.json          # Grouping metadata for the skills.sh directory
 ├── PLUGIN_DESCRIPTION.md
 └── README.md
 ```
