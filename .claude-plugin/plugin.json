@@ -1,9 +1,9 @@
 {
   "name": "froala",
   "description": "Froala WYSIWYG editor plugin — get expert help with initialization, events, custom plugins, and Filestack integration.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": {
-    "name": "Carl Cruz"
+    "name": "Froala"
   },
   "homepage": "https://github.com/froala/froala-claude",
   "repository": "https://github.com/froala/froala-claude",

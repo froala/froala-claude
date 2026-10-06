@@ -1,27 +1,33 @@
-# Froala Claude Plugin
+# Froala Agent Skills
 
-A Claude Code plugin that makes Claude an expert on [Froala WYSIWYG editor](https://froala.com/wysiwyg-editor/) development. Get accurate, framework-specific answers about initialization, events, custom plugins, and Filestack cloud storage integration — without leaving your editor.
+Portable [Agent Skills](https://agentskills.io/home) that make an AI coding agent an expert on [Froala WYSIWYG editor](https://froala.com/wysiwyg-editor/) development — initialization, events, custom plugins, Filestack cloud storage, and error diagnosis.
+
+The skills use the open `SKILL.md` format, so they work in Claude Code, Cursor, Codex, GitHub Copilot, and any other agent that supports it. Install once and your agent answers Froala questions from structured knowledge instead of guessing.
 
 ---
 
 ## Installation
 
-### Claude Code
+### Any supported agent (skills.sh)
+
+```bash
+npx skills add froala/froala-claude
+```
+
+Installs all five skills into `.agents/skills/` for any `SKILL.md`-compatible agent, and symlinks them for Claude Code. Add `-g` to install globally, or `-s <skill-name>` to pick individual skills.
+
+### Claude Code plugin marketplace
 
 ```
 /plugin marketplace add froala/froala-claude
 /plugin install froala@froala-claude
 ```
 
-The five skills then load automatically as `froala:froala-initialization-and-sdks`, `froala:froala-methods-and-events`, and so on.
+The skills then load as `froala:froala-initialization-and-sdks`, `froala:froala-methods-and-events`, and so on.
 
-### Cursor, Codex, Copilot, and other agents
+### Manual
 
-```
-npx skills add froala/froala-claude
-```
-
-Installs all five skills into `.agents/skills/` (project-level) for any SKILL.md-compatible agent, and symlinks them for Claude Code. Add `-g` to install globally, or `-s <skill-name>` to pick individual skills.
+Copy any `skills/<name>/` directory into your agent's skills directory — for example `.claude/skills/` for Claude Code, or `.agents/skills/` for Cursor, Codex, and Copilot.
 
 ### Local / Development
 
@@ -42,7 +48,7 @@ claude plugin validate . --strict
 
 ## Skills
 
-The plugin ships 5 skills that activate automatically based on your code and questions. You don't invoke them manually — Claude detects the context.
+The five skills activate automatically based on your code and questions. You don't invoke them manually — your agent matches the context against each skill's description.
 
 ### `froala-initialization-and-sdks`
 
@@ -148,6 +154,12 @@ Covers:
 
 **"My toolbar button shows up but clicking it does nothing."**
 → `froala-error-diagnosis` activates → Checks plugin registration order (`RegisterCommand` must run before `new FroalaEditor`), `pluginsEnabled` allowlist, and `this` context in callbacks
+
+---
+
+## Why These Skills Exist
+
+Froala has a rich but sprawling API. Developers repeatedly hit the same problems: initialization order, event binding timing, custom plugin boilerplate, upload interception, and failures that produce no error at all. These skills encode the solutions to those recurring problems in a structured form, so an agent gives correct, Froala-specific answers instead of generic WYSIWYG advice.
 
 ---
 
