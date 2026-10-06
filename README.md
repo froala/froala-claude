@@ -6,12 +6,36 @@ A Claude Code plugin that makes Claude an expert on [Froala WYSIWYG editor](http
 
 ## Installation
 
+### Claude Code
+
+```
+/plugin marketplace add froala/froala-claude
+/plugin install froala@froala-claude
+```
+
+The five skills then load automatically as `froala:froala-initialization-and-sdks`, `froala:froala-methods-and-events`, and so on.
+
+### Cursor, Codex, Copilot, and other agents
+
+```
+npx skills add froala/froala-claude
+```
+
+Installs all five skills into `.agents/skills/` (project-level) for any SKILL.md-compatible agent, and symlinks them for Claude Code. Add `-g` to install globally, or `-s <skill-name>` to pick individual skills.
 
 ### Local / Development
 
+From a clone of this repository:
+
 ```
-/plugin marketplace add file:///path/to/froala_claude_plugin
-/plugin install froala-claude-plugin@froala-local
+/plugin marketplace add /path/to/froala-claude
+/plugin install froala@froala-claude
+```
+
+Validate manifest changes before pushing:
+
+```
+claude plugin validate . --strict
 ```
 
 ---
@@ -130,10 +154,10 @@ Covers:
 ## Project Structure
 
 ```
-froala-claude-plugin/
+froala-claude/
 ├── .claude-plugin/
 │   ├── plugin.json         # Plugin metadata
-│   └── marketplace.json    # Enables local installation
+│   └── marketplace.json    # Marketplace entry (local + remote install)
 ├── skills/
 │   ├── froala-initialization-and-sdks/
 │   │   └── SKILL.md
@@ -145,6 +169,7 @@ froala-claude-plugin/
 │   │   └── SKILL.md
 │   └── froala-error-diagnosis/
 │       └── SKILL.md
+├── skills.sh.json          # Grouping metadata for the skills.sh directory
 ├── PLUGIN_DESCRIPTION.md
 └── README.md
 ```

@@ -1,17 +1,12 @@
 {
   "name": "froala",
   "description": "Froala WYSIWYG editor plugin — get expert help with initialization, events, custom plugins, and Filestack integration.",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "author": {
     "name": "Carl Cruz"
   },
+  "homepage": "https://github.com/froala/froala-claude",
+  "repository": "https://github.com/froala/froala-claude",
   "license": "MIT",
-  "keywords": ["froala", "wysiwyg", "editor", "rich-text", "filestack"],
-  "skills": [
-    "./skills/froala-initialization-and-sdks/SKILL.md",
-    "./skills/froala-methods-and-events/SKILL.md",
-    "./skills/froala-custom-plugins/SKILL.md",
-    "./skills/froala-filestack-integration/SKILL.md",
-    "./skills/froala-error-diagnosis/SKILL.md"
-  ]
+  "keywords": ["froala", "wysiwyg", "editor", "rich-text", "filestack"]
 }
