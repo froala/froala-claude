@@ -53,7 +53,7 @@ npm install angular-froala-wysiwyg
 
 <script>
   const editor = new FroalaEditor('#editor', {
-    licenseKey: 'YOUR_LICENSE_KEY',
+    key: 'YOUR_ACTIVATION_KEY',
     toolbarButtons: ['bold', 'italic', 'underline', '|', 'insertImage', 'insertLink'],
     heightMin: 200,
     heightMax: 500,
@@ -79,7 +79,7 @@ import 'froala-editor/js/plugins/link.min.js';
 
 export default function MyEditor({ onModelChange }) {
   const config = {
-    licenseKey: 'YOUR_LICENSE_KEY',
+    key: 'YOUR_ACTIVATION_KEY',
     toolbarButtons: {
       moreText: { buttons: ['bold', 'italic', 'underline', 'fontSize', 'textColor'] },
       moreParagraph: { buttons: ['alignLeft', 'alignCenter', 'alignRight', 'formatOL', 'formatUL'] },
@@ -120,7 +120,7 @@ import 'froala-editor/css/froala_style.min.css';
 
 const content = ref('<p>Hello from Vue!</p>');
 const config = ref({
-  licenseKey: 'YOUR_LICENSE_KEY',
+  key: 'YOUR_ACTIVATION_KEY',
   toolbarButtons: ['bold', 'italic', 'underline', '|', 'insertImage'],
   heightMin: 200,
 });
@@ -154,7 +154,7 @@ export class AppModule {}
 export class MyComponent {
   content = '<p>Hello from Angular!</p>';
   options = {
-    licenseKey: 'YOUR_LICENSE_KEY',
+    key: 'YOUR_ACTIVATION_KEY',
     toolbarButtons: ['bold', 'italic', 'underline'],
     heightMin: 200,
   };
@@ -167,7 +167,7 @@ export class MyComponent {
 
 ```js
 const config = {
-  licenseKey: 'YOUR_LICENSE_KEY',
+  key: 'YOUR_ACTIVATION_KEY',
 
   // Toolbar
   toolbarButtons: ['bold', 'italic', 'underline', '|', 'alignLeft', 'alignCenter',
@@ -198,13 +198,13 @@ const config = {
 ## License Key
 
 - **Localhost / development:** Froala shows a warning banner if no key is set. This does not break functionality.
-- **Production:** Set `licenseKey` in your config. Get a key at [froala.com](https://froala.com/wysiwyg-editor/pricing/).
+- **Production:** Set `key` in your config. The option is `key` — **not** `licenseKey`, which is not a Froala option and is silently ignored, leaving the banner in place with no error. Get a key at [cart.froala.com](https://cart.froala.com/).
 - **Trial key:** Use the key from your Froala account dashboard; it expires after 30 days.
 
 Do **not** hardcode production license keys in public repos — inject via environment variable:
 
 ```js
-licenseKey: process.env.FROALA_LICENSE_KEY,
+key: process.env.FROALA_ACTIVATION_KEY,
 ```
 
 ---

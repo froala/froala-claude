@@ -127,7 +127,7 @@ Covers:
 - `FroalaEditor is not defined` / `is not a constructor` (script load order, wrong import style)
 - Plugin method undefined (`editor.image is undefined`, `editor.link is undefined`) — plugin not imported or called before `initialized`
 - Editor does not mount / element not found (selector mismatch, DOM not ready)
-- License warning banner (missing or invalid `licenseKey`)
+- License warning banner (missing or invalid `key` — note the option is `key`, not `licenseKey`)
 - Toolbar button renders but does nothing (plugin registered after editor init)
 - Image/file upload fails silently (missing `imageUploadURL`, wrong server response shape, CORS)
 - `html.get()` returns empty string (called before editor is ready)

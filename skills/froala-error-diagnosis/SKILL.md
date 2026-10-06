@@ -214,16 +214,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 **Symptom:** Yellow banner reading "You are using an unlicensed version of Froala Editor."
 
-**Cause — `licenseKey` not set or invalid.**
+**Cause — `key` not set or invalid.**
+The activation option is `key`. Using `licenseKey` is a common mistake: it is not a Froala option, so it is silently ignored and the banner stays with no error shown.
 This is cosmetic only in development, but required for production.
 
 ```js
 new FroalaEditor('#editor', {
-  licenseKey: process.env.FROALA_LICENSE_KEY, // never hardcode in public repos
+  key: process.env.FROALA_ACTIVATION_KEY, // never hardcode in public repos
 });
 ```
 
-Get a key at [froala.com/wysiwyg-editor/pricing](https://froala.com/wysiwyg-editor/pricing/). A missing key does not break functionality — it only shows the banner.
+Get a key at [cart.froala.com](https://cart.froala.com/). A missing key does not break functionality — it only shows the banner.
 
 ---
 
