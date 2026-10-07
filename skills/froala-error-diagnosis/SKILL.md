@@ -6,6 +6,9 @@ description: >
   plugin not loading, plugin not working, editor broken, editor not rendering, editor not showing),
   console error tokens (FroalaEditor is not defined, is not a constructor, html is undefined,
   image is undefined, Cannot read property, pluginsEnabled),
+  Next.js tokens (Element is not defined, next build fails, ssr false),
+  version tokens (CDN mismatch, editor looks broken after update),
+  API tokens (editor.text is undefined, froala-editor tag not rendering, AI terms popup),
   or when user asks why a toolbar button, plugin, upload, or editor feature is not working.
 version: 1.0.0
 license: MIT
@@ -108,9 +111,11 @@ import 'froala-editor/css/froala_style.min.css';       // content styling
 
 For CDN:
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/froala-editor/css/froala_editor.pkgd.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/froala-editor/css/froala_style.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/froala-editor@5.5.0/css/froala_editor.pkgd.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/froala-editor@5.5.0/css/froala_style.min.css">
 ```
+
+**If `theme` is set, its stylesheet is also required.** `dark`, `gray` and `royal` each need `froala-editor/css/themes/<name>.min.css`. Setting `theme: 'dark'` without loading `themes/dark.min.css` leaves the editor unstyled.
 
 ---
 
@@ -124,7 +129,7 @@ The script tag is in `<head>` without `defer`, or the inline script runs before 
 ```html
 <!-- WRONG — script may not be loaded when inline JS runs -->
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/froala-editor/js/froala_editor.pkgd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/froala-editor@5.5.0/js/froala_editor.pkgd.min.js"></script>
 </head>
 <body>
   <script>new FroalaEditor('#editor', {});</script> <!-- may fail -->
@@ -133,7 +138,7 @@ The script tag is in `<head>` without `defer`, or the inline script runs before 
 <!-- CORRECT — place before </body> or use DOMContentLoaded -->
 <body>
   <div id="editor"></div>
-  <script src="https://cdn.jsdelivr.net/npm/froala-editor/js/froala_editor.pkgd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/froala-editor@5.5.0/js/froala_editor.pkgd.min.js"></script>
   <script>new FroalaEditor('#editor', {});</script>
 </body>
 ```
@@ -216,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 **Cause — `key` not set or invalid.**
 The activation option is `key`. Using `licenseKey` is a common mistake: it is not a Froala option, so it is silently ignored and the banner stays with no error shown.
-This is cosmetic only in development, but required for production.
+The notice does **not** appear on `localhost`, so an integration can be built and tested locally without a key. It appears on every other domain. Add the key before deploying.
 
 ```js
 new FroalaEditor('#editor', {
@@ -335,6 +340,82 @@ events: {
 
 ---
 
+## Next.js Build Fails: `ReferenceError: Element is not defined`
+
+**Symptom:** `next build` fails, or the page errors during server rendering.
+
+**Cause — Froala imported during server rendering.** Froala needs the browser DOM. Adding `'use client'` is **not** enough, because client components are still pre-rendered on the server.
+
+```jsx
+// CORRECT — skip server rendering entirely
+import dynamic from 'next/dynamic';
+const Editor = dynamic(() => import('../components/Editor'), { ssr: false });
+```
+
+---
+
+## Editor Looks Broken After a CDN Update
+
+**Symptom:** The editor worked, then broke with no code change.
+
+**Cause — CSS and JS versions differ.** Unversioned jsDelivr URLs can serve cached older files independently, so the CSS and JS drift apart.
+
+```html
+<!-- Pin the same version in every URL -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/froala-editor@5.5.0/css/froala_editor.pkgd.min.css">
+<script src="https://cdn.jsdelivr.net/npm/froala-editor@5.5.0/js/froala_editor.pkgd.min.js"></script>
+```
+
+---
+
+## `editor.text is undefined`
+
+**Symptom:** `editor.text.get()` throws.
+
+**Cause — there is no `text` API.** Use `editor.html.get()` for the content, or `editor.selection.text()` for the selected text.
+
+---
+
+## Vue Component Not Rendering
+
+**Symptom:** Nothing appears where the editor should be; no error.
+
+**Cause — wrong tag.** `app.use(VueFroala)` registers the component as `<froala>`, not `<froala-editor>`.
+
+```vue
+<froala :tag="'textarea'" :config="config" v-model:value="content"></froala>
+```
+
+---
+
+## AI Buttons Only Show a "Terms" Popup
+
+**Symptom:** Clicking an AI Assist button opens a popup asking you to accept the AI Supplemental Terms, and nothing else happens.
+
+**Cause — `aiSupplementalTermsAccepted` not set.**
+
+```js
+new FroalaEditor('#editor', {
+  aiSupplementalTermsAccepted: true,
+});
+```
+
+---
+
+## Track Changes Buttons Missing
+
+**Symptom:** `trackChanges`, `showChanges`, `applyAll` or `removeAll` are in `toolbarButtons` but never render.
+
+**Cause — `track_changes.min.js` is not in the `pkgd` bundles.** Load it separately.
+
+```js
+import 'froala-editor/js/plugins/track_changes.min.js';
+```
+
+The same applies to `edit_in_popup`, `trim_video`, and the `third_party` plugins (`embedly`, `font_awesome`, `image_tui`, `imageFileRobot`, `spell_checker`).
+
+---
+
 ## Quick Diagnosis Checklist
 
 If something isn't working and you're not sure where to start:
@@ -346,3 +427,5 @@ If something isn't working and you're not sure where to start:
 5. **Confirm `pluginsEnabled` includes** every plugin you need (or remove it entirely)
 6. **Wrap post-init calls** in the `initialized` event
 7. **Use `function()` not `() =>`** for all Froala event handlers
+8. **Pin the same version** in every CDN URL
+9. **Next.js:** load the editor with `ssr: false`

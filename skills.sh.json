@@ -19,6 +19,14 @@
       ]
     },
     {
+      "title": "ai and documents",
+      "description": "Add AI writing, Word import and export, Markdown, Track Changes and real-time collaboration.",
+      "skills": [
+        "froala-ai-assist",
+        "froala-document-features"
+      ]
+    },
+    {
       "title": "troubleshooting",
       "description": "Diagnose Froala errors, broken toolbars, and features that silently do nothing.",
       "skills": [

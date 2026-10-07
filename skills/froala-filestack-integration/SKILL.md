@@ -6,7 +6,7 @@ description: >
   plugin events (filestack.uploadedToFilestack, filestack.filestackPickerOpened),
   upload interception tokens (image.beforeUpload, file.beforeUpload, imageUploadURL, fileUploadURL),
   or when user asks how to use Filestack with Froala, bypass Froala's default uploader, or store files in the cloud.
-version: 2.0.0
+version: 1.0.0
 license: MIT
 ---
 
@@ -36,17 +36,19 @@ Include all four scripts/stylesheets before Froala initializes:
 <script src="https://static.filestackapi.com/transforms-ui/2.x.x/transforms.umd.min.js"></script>
 <link rel="stylesheet" href="https://static.filestackapi.com/transforms-ui/2.x.x/transforms.css" />
 
-<!-- Froala Filestack plugin -->
-<script src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/plugins/filestack.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/plugins/filestack.min.css" />
+<!-- Froala Filestack plugin: already in froala_editor.pkgd.min.js.
+     Only load these if you use the core build (froala_editor.min.js). -->
+<script src="https://cdn.jsdelivr.net/npm/froala-editor@5.5.0/js/plugins/filestack.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/froala-editor@5.5.0/css/plugins/filestack.min.css" />
 ```
+
+Pin the version in every CDN URL — unversioned or `@latest` URLs can serve cached older files.
 
 ### Configuration
 
 ```js
 new FroalaEditor('#editor', {
-  // Enable the plugin
-  pluginsEnabled: ['filestack'],
+  toolbarButtons: ['bold', 'italic', '|', 'insertImage', 'insertFile', 'insertVideo'],
 
   filestackOptions: {
     filestackAPI: 'YOUR_FILESTACK_API_KEY',       // Required
@@ -70,6 +72,8 @@ new FroalaEditor('#editor', {
   },
 });
 ```
+
+**Do not set `pluginsEnabled: ['filestack']`.** `pluginsEnabled` is an allowlist — listing only `filestack` disables every other plugin, so image, link, table and the rest of the toolbar silently disappear. Omit it entirely unless you intend to restrict the plugin set.
 
 ### Plugin Options
 
@@ -172,7 +176,8 @@ fsClient.upload(file).then((result) => {
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| Plugin does nothing | `pluginsEnabled` missing or doesn't include `'filestack'` | Add `pluginsEnabled: ['filestack']` |
+| Plugin does nothing | Using the core build without `js/plugins/filestack.min.js` | Use `froala_editor.pkgd.min.js`, or load the plugin JS and CSS |
+| Every other toolbar button vanished | `pluginsEnabled: ['filestack']` set — it is an allowlist | Remove `pluginsEnabled` |
 | Plugin broken / no picker UI | Wrong Filestack JS version | Official plugin requires `3.x.x`, not `4.x.x` |
 | No transforms/drag-drop UI | Missing CDN dependencies | Include all four scripts/stylesheets listed above |
 | Image appears then disappears | Forgot `return false` in `image.beforeUpload` | Always `return false` to cancel Froala's upload attempt |

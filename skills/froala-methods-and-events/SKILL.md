@@ -85,6 +85,9 @@ const editor = new FroalaEditor('#editor', {
 | `paste.before` | Before paste event |
 | `paste.afterCleanup` | After paste content is cleaned up |
 | `html.set` | After `editor.html.set()` is called |
+| `image.error` | Image upload or insertion fails |
+| `word.beforeImport` / `word.afterImport` | Around Word (.docx) import |
+| `markdown.afterGet` | After Markdown is read |
 
 ---
 
@@ -93,26 +96,37 @@ const editor = new FroalaEditor('#editor', {
 ```js
 // Get the editor's HTML content
 const html = editor.html.get();           // includes formatting tags
-const text = editor.text.get();           // plain text only
 
 // Set the editor's HTML content
 editor.html.set('<p>New content</p>');
+editor.html.insert('<b>inserted</b>');
 
-// Get selected text
-const selection = editor.selection.text();
-
-// Get selected HTML
-const selectedHtml = editor.selection.element();
+// Selection
+const selected = editor.selection.text();     // selected text, plain
+const el = editor.selection.element();        // selected element
+editor.selection.save();
+editor.selection.restore();
 ```
+
+**There is no `editor.text.get()`.** That API does not exist and throws. Use `editor.html.get()` for the content, or `editor.selection.text()` for the selected text.
 
 **React (via model):**
 
 ```jsx
-// Use onModelChange instead of events for React
+// Use model / onModelChange instead of reading content directly
 <FroalaEditorComponent
-  onModelChange={(model) => setContent(model)}
+  tag="textarea"
   model={content}
+  onModelChange={setContent}
 />
+```
+
+To call editor methods in React, keep a ref and use `getEditor()`:
+
+```jsx
+const ref = useRef(null);
+// ...
+ref.current.getEditor().html.insert('<strong>Inserted!</strong>');
 ```
 
 ---
@@ -165,6 +179,8 @@ new FroalaEditor('#editor', {
   },
 });
 ```
+
+`htmlAllowedTags` / `htmlAllowedAttrs` / `htmlRemoveTags` govern the HTML the editor emits, so change them deliberately. Client-side sanitization is **not** a security boundary: always sanitize submitted HTML on the server as well.
 
 ---
 
