@@ -1,6 +1,6 @@
 # Froala Agent Skills
 
-Portable [Agent Skills](https://agentskills.io/home) that make an AI coding agent an expert on [Froala WYSIWYG editor](https://froala.com/wysiwyg-editor/) development — initialization, events, custom plugins, Filestack cloud storage, and error diagnosis.
+Portable [Agent Skills](https://agentskills.io/home) that make an AI coding agent an expert on [Froala WYSIWYG editor](https://froala.com/wysiwyg-editor/) development — initialization, events, custom plugins, AI Assist, Word and Markdown workflows, Filestack uploads, and error diagnosis.
 
 The skills use the open `SKILL.md` format, so they work in Claude Code, Cursor, Codex, GitHub Copilot, and any other agent that supports it. Install once and your agent answers Froala questions from structured knowledge instead of guessing.
 
@@ -14,7 +14,7 @@ The skills use the open `SKILL.md` format, so they work in Claude Code, Cursor, 
 npx skills add froala/froala-claude
 ```
 
-Installs all five skills into `.agents/skills/` for any `SKILL.md`-compatible agent, and symlinks them for Claude Code. Add `-g` to install globally, or `-s <skill-name>` to pick individual skills.
+Installs all seven skills into `.agents/skills/` for any `SKILL.md`-compatible agent, and symlinks them for Claude Code. Add `-g` to install globally, or `-s <skill-name>` to pick individual skills.
 
 ### Claude Code plugin marketplace
 
@@ -48,7 +48,7 @@ claude plugin validate . --strict
 
 ## Skills
 
-The five skills activate automatically based on your code and questions. You don't invoke them manually — your agent matches the context against each skill's description.
+The seven skills activate automatically based on your code and questions. You don't invoke them manually — your agent matches the context against each skill's description.
 
 ### `froala-initialization-and-sdks`
 
@@ -138,6 +138,34 @@ Covers:
 
 ---
 
+### `froala-ai-assist`
+
+**Activates when** you add AI writing features — prompts, tone, translate, improve writing, AI Chat or AI image generation.
+
+Covers:
+- The required `aiSupplementalTermsAccepted: true`
+- Routing requests through your own backend with `aiAssistRequest` (keeps provider API keys off the client)
+- Provider choice: OpenAI, Google Gemini, Anthropic, Groq or your own service
+- AI Chat model picker, streaming, file context, speech-to-text, inline suggestions
+
+**Trigger keywords:** `aiSupplementalTermsAccepted`, `aiAssistRequest`, `aiChatModels`, `aiAssist`, `aiChatAssistant`, `inlineSuggestions`
+
+---
+
+### `froala-document-features`
+
+**Activates when** you work with Word import/export, Markdown, Track Changes or real-time collaboration.
+
+Covers:
+- Word `.docx` import (browser via mammoth.js, or server-side) and export
+- Markdown with `markdown.getMarkdown()` / `markdown.setMarkdown()`
+- Track Changes — including that `track_changes.min.js` is **not** in the packaged bundles
+- Collaborative editing: `collabConfig`, roles, suggestion mode, comments and version history
+
+**Trigger keywords:** `import_from_word`, `export_to_word`, `markdown.getMarkdown`, `trackChanges`, `collabConfig`, `syncUrl`
+
+---
+
 ## Example Interactions
 
 **"How do I add Froala to my React app with a dark theme?"**
@@ -151,6 +179,12 @@ Covers:
 
 **"How do I make Froala upload images to Filestack instead of my server?"**
 → `froala-filestack-integration` activates → Recommends the official Froala Filestack plugin with `filestackOptions` config, or manual `image.beforeUpload` interception + `client.upload()` + `editor.image.insert()` wiring for advanced cases
+
+**"How do I add AI writing to Froala using our own OpenAI key?"**
+→ `froala-ai-assist` activates → `aiAssistRequest` routed through your backend, with `aiSupplementalTermsAccepted: true` and a note on why the browser-direct example is prototype-only
+
+**"How do I let users import a Word document into the editor?"**
+→ `froala-document-features` activates → `import_from_word` with mammoth.js for client-side conversion, size and file-type limits, and the import events
 
 **"My toolbar button shows up but clicking it does nothing."**
 → `froala-error-diagnosis` activates → Checks plugin registration order (`RegisterCommand` must run before `new FroalaEditor`), `pluginsEnabled` allowlist, and `this` context in callbacks
@@ -178,6 +212,10 @@ froala-claude/
 │   ├── froala-custom-plugins/
 │   │   └── SKILL.md
 │   ├── froala-filestack-integration/
+│   │   └── SKILL.md
+│   ├── froala-ai-assist/
+│   │   └── SKILL.md
+│   ├── froala-document-features/
 │   │   └── SKILL.md
 │   └── froala-error-diagnosis/
 │       └── SKILL.md
